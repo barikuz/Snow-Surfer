@@ -7,12 +7,19 @@ public class PlayerController : MonoBehaviour
     InputAction inputActions;
     Rigidbody2D rigidbody2D;
     SurfaceEffector2D surfaceEffector2D;
+    ScoreManager scoreManager;
 
     Vector2 moveVector;
 
     [SerializeField] float torqueAmount = 1f;
     [SerializeField] float baseSpeed = 13f;
     [SerializeField] float boostSpeed = 20f;
+
+    public bool canControl = true;
+
+    float currentRotation;
+    float previousRotation;
+    float totalRotation;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,16 +28,19 @@ public class PlayerController : MonoBehaviour
         inputActions = InputSystem.actions.FindAction("Move");
         rigidbody2D = GetComponent<Rigidbody2D>();
         surfaceEffector2D = FindFirstObjectByType<SurfaceEffector2D>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
         moveVector = inputActions.ReadValue<Vector2>();
-        
-        RotatePlayer();
-        BoostPlayer();
-       
+        if (canControl)
+        {
+            RotatePlayer();
+            CalculateFlips();
+            BoostPlayer();
+        }      
     }
 
     void RotatePlayer()
@@ -56,5 +66,26 @@ public class PlayerController : MonoBehaviour
         {
             surfaceEffector2D.speed = baseSpeed;
         }
+    }
+
+    public void DisableControls()
+    {
+        canControl = false;
+    }
+
+    void CalculateFlips()
+    {
+        currentRotation = transform.rotation.eulerAngles.z;
+
+        totalRotation += Mathf.DeltaAngle(previousRotation, currentRotation);
+
+        if(totalRotation > 340 || totalRotation < -340)
+        {
+            totalRotation = 0;
+            scoreManager.AddScore(10);
+        }
+
+        previousRotation = currentRotation;
+
     }
 }
