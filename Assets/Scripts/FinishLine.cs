@@ -5,11 +5,11 @@ public class FinishLine : MonoBehaviour
     [SerializeField] float delay = 1f;
     [SerializeField] ParticleSystem finishEffect;
 
-    private void OnTriggerEnter2D(Collider2D collison) 
+    private void OnTriggerEnter2D(Collider2D collision) 
     {
         int layerIndex = LayerMask.NameToLayer("Player");
         
-        if(collison.gameObject.layer == layerIndex)
+        if(collision.gameObject.layer == layerIndex)
         {
             finishEffect.Play();
             Invoke("RestartGame", delay);
