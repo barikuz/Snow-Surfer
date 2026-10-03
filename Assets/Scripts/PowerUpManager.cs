@@ -6,11 +6,19 @@ public class PowerUpManager : MonoBehaviour
 
     PlayerController playerController;
     SpriteRenderer spriteRenderer;
+    
+    float timeLeft;
 
     void Start()
     {
         playerController = FindFirstObjectByType<PlayerController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        timeLeft = powerUp.GetTime();
+    }
+
+    void Update()
+    {
+        CountDownTimer();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -21,6 +29,21 @@ public class PowerUpManager : MonoBehaviour
         {
             spriteRenderer.enabled = false; // Disable the sprite renderer to hide the power-up
             playerController.ActivatePowerUp(powerUp);
+        }
+    }
+
+    void CountDownTimer()
+    {
+        if(spriteRenderer.enabled == false)
+        {
+            if (timeLeft > 0)
+            {
+                timeLeft -= Time.deltaTime;
+                if (timeLeft <= 0)
+                {
+                    playerController.DeactivatePowerUp(powerUp);
+                }
+            }
         }
     }
 }
