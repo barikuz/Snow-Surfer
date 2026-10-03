@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     InputAction inputActions;
     Rigidbody2D rigidbody2D;
     SurfaceEffector2D surfaceEffector2D;
-    ScoreManager scoreManager;
+    [SerializeField] ScoreManager scoreManager;
 
     [SerializeField] ParticleSystem powerUpParticles;
 
@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         inputActions = InputSystem.actions.FindAction("Move");
         rigidbody2D = GetComponent<Rigidbody2D>();
         surfaceEffector2D = FindFirstObjectByType<SurfaceEffector2D>();
-        scoreManager = FindFirstObjectByType<ScoreManager>();
+        
     }
 
     // Update is called once per frame
